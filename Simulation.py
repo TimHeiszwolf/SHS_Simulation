@@ -14,7 +14,7 @@ class Simulation:
 		"""
 		Runs a single tick of the simulation.
 		
-		>>> sim=Get_Simple_Containers_and_Routing()
+		>>> sim=Get_Simple_Simulation()
 		>>> sim.containers[0].volume
 		0.15707963267948968
 		>>> sim.containers[0].volume_capacity
@@ -65,13 +65,14 @@ class Simulation:
 	
 	def run_amount_of_ticks(self, amount):
 		"""
+		Runs the simulation for some amount of ticks. THIS IS ONLY FOR TESTING AND SHOULD NOT BE USED BY THE CONTROLLER!
 		"""
 		for i in range(amount):
 			self.run_tick()
 
 	
 
-def Get_Simple_Containers_and_Routing():
+def Get_Simple_Simulation():
 	containers=[]
 	
 	containers.append(Container(0, 0.5*(2**0.5), 1, 0.0025, 10, 293, 12*(10**-5)))#Huge container with pump
