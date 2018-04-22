@@ -60,7 +60,7 @@ class Container:
 	
 	def volume_Output(self, input_liquid, delta_time):
 		
-		output_liquid = {'volume':max([self.volume-self.volume_capacity+self.pump*delta_time, 0.0]), 'temperature': self.temperature, 'heat capacity': self.heat_capacity, 'density': self.density}
+		output_liquid = {'volume':self.pump*delta_time+max([self.volume-self.volume_capacity, 0.0]), 'temperature': self.temperature, 'heat capacity': self.heat_capacity, 'density': self.density}
 		
 		self.volume = self.volume-output_liquid['volume']
 		
