@@ -20,16 +20,18 @@ class Simulation:
 				if output_container.ID == output_container_ID:
 					output_container.volume_Input(output, self.delta_time)
 					break
+		
+		self.time = self.time+self.delta_time
 
 	
 
 def Get_Simple_Containers_and_Routing():
 	containers=[]
 	
-	containers.append(container(0, 0.5*(2**0.5), 1, 10, 293, 3*(10**-9)))#Huge container with pump
+	containers.append(Container(0, 0.5*(2**0.5), 1, 0.0025, 10, 293, 3*(10**-9)))#Huge container with pump
 	
 	for i in range(200):
-		containers.append(container(1+i,0.01,0.01, 0, 293, 0))
+		containers.append(Container(1+i, 0.01, 0.01, 0.0025, 0, 293, 0))
 	
 	Routing={}
 	
