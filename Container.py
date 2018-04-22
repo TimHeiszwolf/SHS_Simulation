@@ -12,6 +12,7 @@ class Container:
 		self.radius = radius
 		self.length = length
 		self.depth = depth
+		self.area = length*radius
 		self.ID = int(ID)
 		self.area_container = float(math.pi*2*radius*length)#Square meter
 		self.mass_container = float(self.density_container*self.area_container*depth)#Kilogram
@@ -43,11 +44,12 @@ class Container:
 		
 		
 		"""
-		self.temperature_container = self.temperature_container+external_power*delta_time/(self.heat_capacity_container*self.mass_container)#https://en.wikipedia.org/wiki/Heat_capacity
+		self.temperature_container = self.temperature_container+self.area*external_power*delta_time/(self.heat_capacity_container*self.mass_container)#https://en.wikipedia.org/wiki/Heat_capacity
 		
 		internal_power = 0.591*(self.temperature_container-self.temperature)/0.01#No idea of this is right. Mainly the devides by its length bit. https://en.wikipedia.org/wiki/Thermal_conduction#Fourier's_law
 		
-		self.temperature = self.temperature+internal_power*delta_time/(self.heat_capacity*self.mass())
+		if (self.heat_capacity*self.mass())!=0:
+			self.temperature = self.temperature+internal_power*delta_time/(self.heat_capacity*self.mass())
 		
 	def volume_Input(self, input_liquid, delta_time):
 		"""
@@ -85,10 +87,13 @@ class Container:
 		
 		total_energy = old_mass*old_temp*self.heat_capacity+input_density*input_volume*input_temperature*input_heat_capacity
 		
-		self.heat_capacity = (old_mass*self.heat_capacity+input_volume*input_density*input_heat_capacity)/(old_mass+input_density*input_volume)#Don't know if right but weighted average of heat capcity by mass
-		self.density = (old_mass+input_volume*input_density)/(old_volume+input_volume)
+		if (old_mass+input_density*input_volume)!=0:
+			self.heat_capacity = (old_mass*self.heat_capacity+input_volume*input_density*input_heat_capacity)/(old_mass+input_density*input_volume)#Don't know if right but weighted average of heat capcity by mass
+		if (old_volume+input_volume)!=0:
+			self.density = (old_mass+input_volume*input_density)/(old_volume+input_volume)
 		self.volume = old_volume+input_volume
-		self.temperature = total_energy/(self.heat_capacity*self.mass())
+		if (self.mass()*self.heat_capacity)!=0:
+			self.temperature = total_energy/(self.heat_capacity*self.mass())
 		
 	
 	def volume_Output(self, delta_time):
