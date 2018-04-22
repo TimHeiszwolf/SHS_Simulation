@@ -37,6 +37,18 @@ class Simulation:
 		>>> sim.containers[199].volume
 		0.0
 		>>> sim.run_amount_of_ticks(200)
+		>>> sim.containers[0].volume
+		0.1564513141487711
+		>>> sim.containers[200].volume
+		3.141592653589794e-06
+		>>> sim.containers[200].temperature
+		293.77338520832353
+		>>> sim.delta_time=5.0
+		>>> sim.run_amount_of_ticks(300)
+		>>> sim.containers[0].temperature
+		319.1602169516945
+		>>> sim.containers[200].temperature
+		352.0721049732411
 		"""
 		for current_container in self.containers:
 			current_container.conduct_heat(self.delta_time, self.power)
