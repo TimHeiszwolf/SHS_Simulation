@@ -91,6 +91,8 @@ class Controller:
 def Get_Simple_Controller():
 	return Controller(Get_Simple_Simulation(), [False, 'Controller_test.csv', 2, 400])
 
+#Controller(Get_Simple_Simulation(), [True, 'test.csv', 1, 1000])
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
