@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import pandas as pd
+import os
 
 from Simulation import Simulation
 from Simulation import Get_Simple_Simulation
@@ -8,6 +9,11 @@ from Container import Container
 
 class Controller:
 	def __init__(self, simulation, CSV_export_settings):
+		"""
+		
+		>>> con = Controller(Get_Simple_Simulation(), [True, 'Controller_test.csv', 2, 400])
+		>>> os.remove('Controller_test.csv')
+		"""
 		self.sim = simulation
 		
 		self.CSVexport=CSV_export_settings[0]
@@ -17,15 +23,17 @@ class Controller:
 			header='time'
 			for con in self.sim.containers:
 				extra=''
-				for specific in [' volume', ' volume capacity', ' temperature']:
+				for specific in [' volume', ' volume capacity', ' temperature', ' temperature container']:
 					extra = extra+', '+str(con.ID)+specific
 				header = header+extra
 			
 			self.file.write(header+'\n')
 			
-			for i in range(round(CSV_export_settings[3]/CSV_export_settings[2])):
+			for i in range(round(CSV_export_settings[3]/CSV_export_settings[2])+1):
 				self.run_until_time(i*CSV_export_settings[2])
 				self.CSV_export_data()
+			
+			self.file.close()
 	
 	def run_amount_of_ticks(self, amount):
 		"""
@@ -74,14 +82,14 @@ class Controller:
 		data_line=str(self.sim.time)
 		
 		for con in self.sim.containers:
-			extra=', '+str(con.volume)+', '+str(con.volume_capacity)+', '+str(con.temperature)
+			extra=', '+str(con.volume)+', '+str(con.volume_capacity)+', '+str(con.temperature)+', '+str(con.temperature_container)
 			data_line=data_line+extra
 		
 		self.file.write(data_line+'\n')
 
 
 def Get_Simple_Controller():
-	return Controller(Get_Simple_Simulation(), [True, 'Controller_test.csv', 2, 400])
+	return Controller(Get_Simple_Simulation(), [False, 'Controller_test.csv', 2, 400])
 
 if __name__ == "__main__":
     import doctest
