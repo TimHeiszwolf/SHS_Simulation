@@ -56,10 +56,12 @@ class Simulation:
 			
 			output_container_ID = self.routing[str(current_container.ID)][0]#This means it currently only works for one output container
 			
+			self.containers[output_container_ID].volume_Input(output, self.delta_time)#Dit gaat ervan uit dat ID gelijk is aan de key.
+			"""
 			for output_container in self.containers:
 				if output_container.ID == output_container_ID:
 					output_container.volume_Input(output, self.delta_time)
-					break
+					break#"""
 		
 		self.time = self.time+self.delta_time
 	
@@ -76,16 +78,19 @@ def Get_Simple_Simulation():
 	containers=[]
 	
 	containers.append(Container(0, 0.5*(2**0.5), 1, 0.0025, 10, 293, 12*(10**-5)))#Huge container with pump
+	#											1						12
 	
-	for i in range(200):
+	amount=200#20
+	
+	for i in range(amount):
 		containers.append(Container(1+i, 0.01, 0.01, 0.0025, 0, 293, 0))
 	
 	Routing={}
 	
-	for i in range(200):
+	for i in range(amount):
 		Routing[str(i)]=[i+1]
 	
-	Routing['200']=[0]
+	Routing[str(amount)]=[0]
 	
 	return Simulation(containers, Routing, 0.1, 1000)
 

@@ -12,20 +12,19 @@ def Visualization():
 	"""
 	
 	"""
-	loop=True
-	while loop:
+	while True:
 		try:
-			print('WARNING: This program is going to make a lot of files in this folder so keep this in its own folder. It also requires about 25 MB of storage per 1000 datapoints.')
+			print('WARNING: This program is going to make a lot of files in this folder so keep this in its own folder. It also requires about 250 MB of storage per 1000 datapoints.')
 			filename=input('Filename: ')#'test.csv'
 			file=open(filename, 'r')
 			file.close()
-			loop=False
+			break
 		except FileNotFoundError:
 			print('Unable to find file. Did you add the file extestion?')
 	
-	max_volume=float(input('Maximal y-value of volume: '))#4*10**-6
-	min_temperature=float(input('Minimal y-value of temperature: '))#273
-	max_temperature=float(input('Maximal y-value of temperature: '))#273+100
+	max_volume=float(input('Maximal y-value of volume (cubic meter): '))#4*10**-6
+	min_temperature=float(input('Minimal y-value of temperature (Kelvin): '))#273
+	max_temperature=float(input('Maximal y-value of temperature (Kelvin): '))#273+100
 	
 	time_of_gif=10#float(input('Length of gif: '))
 	
@@ -46,36 +45,40 @@ def Visualization():
 		volumes=[]
 		volumes_capacity=[]
 		temperatures=[]
+		temperatures_container=[]
 		
 		for c in range(1,amount_containers):
 			containers.append(c)
 			volumes.append(data.loc[i][4*c+1])
 			volumes_capacity.append(data.loc[i][4*c+2])
 			temperatures.append(data.loc[i][4*c+3])
+			temperatures_container.append(data.loc[i][4*c+4])
 		
-		df=pd.DataFrame({'Container': containers, 'Volume': volumes, 'Volume capacity': volumes_capacity, 'Temperature': temperatures})
+		df=pd.DataFrame({'Container': containers, 'Volume': volumes, 'Volume capacity': volumes_capacity, 'Temperature': temperatures, 'Temperature container': temperatures_container})
 		
 		###THIS PART IS ABSOLUTE SHIT BUT IT GETS THE JOB DONE SO DON'T BITCH OR REWRITE IT YOURSELF!
-		ax=df.plot(x='Container', y='Volume capacity', ylim=(0, max_volume), color='green')
-		ax=df.plot(x='Container', y='Volume', ylim=(0, max_volume), color='blue', ax=ax)
-		ax.set_xlabel='Container'
-		ax.set_ylabel='volume'
-		ax.text(0,0,'Time='+str(data.loc[i][0]))
+		ax_vol=df.plot(x='Container', y='Volume capacity', ylim=(0, max_volume), color='green')
+		ax_vol=df.plot(x='Container', y='Volume', ylim=(0, max_volume), color='blue', ax=ax_vol)
+		ax_vol.set_xlabel='Container'
+		ax_vol.set_ylabel='volume'
+		ax_vol.text(0,0,'Time='+str(data.loc[i][0]))
 		
 		plt.savefig(str(data.loc[i][0])+'_volume.png')
 		volume_images.append(str(data.loc[i][0])+'_volume.png')
 		
 		
-		ax=df.plot(x='Container', y='Temperature', ylim=(min_temperature, max_temperature), color='red')
-		ax.set_xlabel='Container'
-		ax.set_ylabel='temperature'
-		ax.text(0,0,'Time='+str(data.loc[i][0]))
+		ax_temp=df.plot(x='Container', y='Temperature container', ylim=(min_temperature, max_temperature), color='yellow')
+		ax_temp=df.plot(x='Container', y='Temperature', ylim=(min_temperature, max_temperature), color='red', ax=ax_temp)
+		ax_temp.set_xlabel='Container'
+		ax_temp.set_ylabel='temperature'
+		ax_temp.text(0,0,'Time='+str(data.loc[i][0]))#Dit lijkt ook niet te werken.
 		
 		plt.savefig(str(data.loc[i][0])+'_temperature.png')
 		heat_images.append(str(data.loc[i][0])+'_temperature.png')
 		
 		
-		ax1=df.plot(x='Container', y='Temperature', ylim=(min_temperature, max_temperature), color='red')
+		ax1=df.plot(x='Container', y='Temperature container', ylim=(min_temperature, max_temperature), color='yellow')
+		ax1=df.plot(x='Container', y='Temperature', ylim=(min_temperature, max_temperature), color='red', ax=ax1)
 		ax2=ax1.twinx()
 		ax2=df.plot(y='Volume capacity', ylim=(0, max_volume), color='green', ax=ax2)
 		ax2=df.plot(y='Volume', ylim=(0, max_volume), color='blue', ax=ax2)
@@ -87,7 +90,7 @@ def Visualization():
 		
 		plt.close('all')
 		
-		print('Plotting '+str(round(100*i/len(data),3))+'% done.')
+		print('Plotting '+str(round(100*i/len(data),3))+'% done.')#Misschien hier ook nog iets die time left aangeeft.
 		
 		#if i>100:
 		#	break
@@ -102,7 +105,7 @@ def Visualization():
 		for name in names[kind]:
 			images.append(imageio.imread(name))
 		output_file=kind+'.gif'
-		imageio.mimsave(output_file, images, duration=time_of_gif/(len(data)*10))#Why doesn't the duration work properly?
+		imageio.mimsave(output_file, images, duration=time_of_gif/(len(data)*1000))#Why doesn't the duration work properly?
 	
 	print('Now deleting the individual files.')
 	

@@ -32,6 +32,8 @@ class Controller:
 			for i in range(round(CSV_export_settings[3]/CSV_export_settings[2])+1):
 				self.run_until_time(i*CSV_export_settings[2])
 				self.CSV_export_data()
+				
+				#print('Time is: '+str(round(self.sim.time,2)))
 			
 			self.file.close()
 	

@@ -42,7 +42,18 @@ class Container:
 		"""
 		For one unit of delta time this adjusts the temperature of the container and water in the container.
 		
-		
+		>>> containers = Get_Test_Containers()
+		>>> containers[0].temperature=200.0
+		>>> con=containers[0]
+		>>> con.temperature
+		200.0
+		>>> con.temperature_container
+		293.0
+		>>> con.conduct_heat(2, 1000)
+		>>> con.temperature
+		221.00654316455714
+		>>> con.temperature_container
+		186.16243846786787
 		"""
 		self.temperature_container = self.temperature_container+self.area*external_power*delta_time/(self.heat_capacity_container*self.mass_container)#https://en.wikipedia.org/wiki/Heat_capacity
 		
@@ -50,6 +61,7 @@ class Container:
 		
 		if (self.heat_capacity*self.mass())!=0:
 			self.temperature = self.temperature+internal_power*delta_time/(self.heat_capacity*self.mass())
+			#self.temperature_container=self.temperature_container-internal_power*delta_time/(self.heat_capacity_container*self.mass_container)#Als je dit toevoegd lijkt de simulatie niet goed meer te werken dus nog even uitzoeken heo dat zit.
 		
 	def volume_Input(self, input_liquid, delta_time):
 		"""
